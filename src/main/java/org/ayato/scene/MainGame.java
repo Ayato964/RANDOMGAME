@@ -3,6 +3,7 @@ package org.ayato.scene;
 import org.ayato.animation.PropertiesComponent;
 import org.ayato.ui.ButtonLayer;
 import org.ayato.ui.Hold;
+import org.ayato.ui.Latch;
 import org.ayato.ui.Roulette;
 import org.ayato.entities.Player;
 import org.ayato.system.Tick;
@@ -52,6 +53,7 @@ public class MainGame extends BaseScene {
         setups.add(layer);
         setups.add(roulette);
         setups.add(hold);
+        setups.add(new Latch(player));
     }
 
     private void lottery(int number){
