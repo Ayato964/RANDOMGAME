@@ -1,6 +1,8 @@
 package org.ayato.ui;
 
 import org.ayato.animation.PropertiesComponent;
+import org.ayato.animation.text.properties.CheckBox;
+import org.ayato.scene.Title;
 import org.ayato.system.Tick;
 import org.ayato.system.ToonMaster;
 import org.ayato.util.Display;
@@ -22,6 +24,7 @@ public class Roulette implements Setup, Display, Tick {
     private boolean isStartRoulette = false;
     private int rCount = 0;
     private int time = 0;
+    private Chance MODE = Chance.C99;
     public Roulette(){
         int c = 1;
         int r = 0;
@@ -62,6 +65,19 @@ public class Roulette implements Setup, Display, Tick {
                         .color(Color.WHITE).font("", 0, 4f));
             }
         }
+
+        toonMaster.addAnimation("1/99", PropertiesComponent.ofText(350, 10).font("", 0, 1.5f)
+                .chooseBox(aBoolean -> {
+                    MODE = Chance.C99;
+                }, Title.NORMAL.get(), Color.WHITE, CheckBox.Duration.LEFT)).setGroup("chance");
+        toonMaster.addAnimation("1/192", PropertiesComponent.ofText(380, 10).font("", 0, 1.5f)
+                .chooseBox(aBoolean -> {
+                    MODE = Chance.C192;
+                }, Title.NORMAL.get(), Color.WHITE, CheckBox.Duration.LEFT)).setGroup("chance");
+        toonMaster.addAnimation("1/329", PropertiesComponent.ofText(410, 10).font("", 0, 1.5f)
+                .chooseBox(aBoolean -> {
+                    MODE = Chance.C329;
+                }, Title.NORMAL.get(), Color.WHITE, CheckBox.Duration.LEFT)).setGroup("chance");
     }
 
     @Override
@@ -89,7 +105,11 @@ public class Roulette implements Setup, Display, Tick {
             if(time >= 3000){
                 time = 0;
                 isStartRoulette = false;
-                turning(-1);
+                int r0 = seed.nextInt(MODE.chance), r1 = seed.nextInt(MODE.chance);
+                if(r0 == r1)
+                    turning(seed.nextInt(length));
+                else
+                    turning(-1);
             }
         }else{
             busyTime ++;
@@ -100,5 +120,16 @@ public class Roulette implements Setup, Display, Tick {
     @Override
     public long getSerialID() {
         return 999;
+    }
+
+    private static enum Chance{
+        C99(99),
+        C192(192),
+        C329(329);
+
+        int chance;
+        Chance(int chance){
+            this.chance = chance;
+        }
     }
 }
