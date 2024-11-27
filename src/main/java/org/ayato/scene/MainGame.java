@@ -1,8 +1,9 @@
 package org.ayato.scene;
 
 import org.ayato.animation.PropertiesComponent;
-import org.ayato.buttons.ButtonLayer;
-import org.ayato.buttons.Roulette;
+import org.ayato.ui.ButtonLayer;
+import org.ayato.ui.Hold;
+import org.ayato.ui.Roulette;
 import org.ayato.entities.Player;
 import org.ayato.system.Tick;
 import org.ayato.system.ToonMaster;
@@ -20,9 +21,19 @@ public class MainGame extends BaseScene {
     private final Random rand = new Random();
     private final ButtonLayer layer = new ButtonLayer(this::lottery);
     private final Roulette roulette = new Roulette();
-
+    private final Hold hold = new Hold(player::getHold, player.maxHold);
     @Override
     public void tick() {
+        rouletteFunction();
+    }
+
+    private void rouletteFunction() {
+        if(player.getHold() != 0){
+            if(!roulette.isBusy){
+                player.decHold();
+                roulette.start();
+            }
+        }
     }
 
     @Override
@@ -40,13 +51,14 @@ public class MainGame extends BaseScene {
     public void setupUIClass(ArrayList<Setup> setups) {
         setups.add(layer);
         setups.add(roulette);
+        setups.add(hold);
     }
 
     private void lottery(int number){
         int lo = rand.nextInt(9) + 1;
         if(lo == number) {
             player.addGold(4);
-            roulette.start();
+            player.addHold(1);
         }
 
         layer.chooseNumber = lo;

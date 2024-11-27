@@ -1,7 +1,9 @@
 package org.ayato.entities;
 
 public class Player {
+    public int maxHold = 4;
     private int gold;
+    private int hold = 0;
     public Player(int g){
         gold = g;
     }
@@ -18,9 +20,19 @@ public class Player {
         return gold;
     }
 
-    public int removeGold(int g){
+    public void removeGold(int g){
         gold -= g;
-        return gold;
     }
 
+    public int getHold() {
+        return hold;
+    }
+    public void addHold(int h){
+        if(hold < maxHold) {
+            hold += h;
+        }
+    }
+    public void decHold(){
+        hold --;
+    }
 }

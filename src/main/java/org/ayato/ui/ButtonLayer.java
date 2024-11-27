@@ -1,7 +1,6 @@
-package org.ayato.buttons;
+package org.ayato.ui;
 
 import org.ayato.animation.PropertiesComponent;
-import org.ayato.scene.MainGame;
 import org.ayato.scene.Title;
 import org.ayato.system.ToonMaster;
 import org.ayato.util.Setup;

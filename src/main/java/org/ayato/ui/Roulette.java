@@ -1,4 +1,4 @@
-package org.ayato.buttons;
+package org.ayato.ui;
 
 import org.ayato.animation.PropertiesComponent;
 import org.ayato.system.Tick;
@@ -7,12 +7,14 @@ import org.ayato.util.Display;
 import org.ayato.util.Setup;
 
 import java.awt.*;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Supplier;
 
 public class Roulette implements Setup, Display, Tick {
+    public boolean isBusy = false;
+
+    private int busyTime = 0;
     private final HashMap<Integer, String> rate = new HashMap<>();
     private String[][] roulette = new String[3][3];
     private final Random seed = new Random();
@@ -72,10 +74,12 @@ public class Roulette implements Setup, Display, Tick {
     }
     public void start(){
         isStartRoulette = true;
+        busyTime = 0;
     }
     @Override
     public void tick() {
         if(isStartRoulette){
+            isBusy = true;
             turning(rCount);
             rCount ++;
             time ++;
@@ -87,6 +91,9 @@ public class Roulette implements Setup, Display, Tick {
                 isStartRoulette = false;
                 turning(-1);
             }
+        }else{
+            busyTime ++;
+            isBusy = busyTime < 2000;
         }
     }
 
